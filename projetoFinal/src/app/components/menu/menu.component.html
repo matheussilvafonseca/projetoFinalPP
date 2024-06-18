@@ -1,0 +1,19 @@
+<mat-drawer-container [hasBackdrop]="true">
+    <mat-drawer #drawer mode="over">
+        <mat-list role="list">
+            <mat-list-item role="listitem">
+                <mat-icon fontIcon="close" (click)="drawer.close()"></mat-icon>
+            </mat-list-item>
+            <mat-list-item class="menu-item" (click)="mudarRota('/home'); drawer.close()" role="listitem">Home</mat-list-item>
+            <mat-list-item class="menu-item" (click)="mudarRota('/categoria'); drawer.close()" role="listitem">Categorias</mat-list-item>
+            <mat-list-item class="menu-item" (click)="mudarRota('/produto'); drawer.close()" role="listitem">Produtos</mat-list-item>
+            <mat-list-item class="menu-item" role="listitem" (click)="logout(); drawer.close()">Sair</mat-list-item>
+        </mat-list>
+    </mat-drawer>
+    <mat-drawer-content>
+        <div class="menu-container">
+            <mat-icon fontIcon="menu" *ngIf="autenticado" style="color: white;" (click)="drawer.toggle()"></mat-icon>
+        </div>
+        <router-outlet></router-outlet>
+    </mat-drawer-content>
+</mat-drawer-container>

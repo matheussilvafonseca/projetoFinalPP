@@ -1,0 +1,17 @@
+mat-drawer-container {
+    min-height: 100vh;
+    background-color: #1c1c1c;
+}
+
+mat-icon:hover, .menu-item:hover {
+    cursor: pointer;
+}
+
+.menu-container {
+    padding: 1rem;
+}
+
+.menu-item {
+    margin-right: 3rem;
+    margin-left: .3rem;
+}

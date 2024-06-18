@@ -1,0 +1,51 @@
+<div class="entry-container">
+    <div class="title"><h1>Pizzaria Bella Pizza</h1></div>
+    <mat-card appearance="outlined">
+        <mat-card-header>
+            <h1>Cadastro</h1>
+        </mat-card-header>
+        <mat-card-content>
+            <form #formCadastro="ngForm">
+                <mat-form-field appearance="outline">
+                    <mat-label>Nome</mat-label>
+                    <input matInput placeholder="Nome" [formControl]="nomeFormControl" />
+                    <mat-error *ngIf="nomeFormControl.errors?.['required']">O nome é obrigatório!</mat-error>
+                    <mat-icon matSuffix fontIcon="person"></mat-icon>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>E-mail</mat-label>
+                    <input matInput placeholder="E-mail" [formControl]="emailFormControl" />
+                    <mat-error *ngIf="emailFormControl.errors?.['required']">O e-mail é obrigatório!</mat-error>
+                    <mat-error *ngIf="emailFormControl.errors?.['email']">O e-mail não é válido!</mat-error>
+                    <mat-icon matSuffix fontIcon="mail"></mat-icon>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Senha</mat-label>
+                    <input matInput type="password" placeholder="Senha" [formControl]="senhaFormControl" />
+                    <mat-error *ngIf="senhaFormControl.errors?.['required']">A senha é obrigatória!</mat-error>
+                    <mat-error *ngIf="senhaFormControl.errors?.['passwordLength']">A senha deve ter no mínimo 8 caracteres!</mat-error>
+                    <mat-error *ngIf="senhaFormControl.errors?.['passwordUpperCase']">A senha deve ter no mínimo 1 caracter MAIÚSCULO!</mat-error>
+                    <mat-error *ngIf="senhaFormControl.errors?.['passwordSpecialChar']">A senha deve ter no mínimo 1 caracter especial!</mat-error>
+                    <mat-error *ngIf="senhaFormControl.errors?.['passwordNumber']">A senha deve ter no mínimo 1 número!</mat-error>
+                    <mat-icon matSuffix fontIcon="password"></mat-icon>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="confirm-password">
+                    <mat-label>Confirmar senha</mat-label>
+                    <input matInput type="password" placeholder="Confirmar senha" [formControl]="confirmarSenhaFormControl" />
+                    <mat-error *ngIf="senhaFormControl.errors?.['required']">A confirmação de senha é obrigatória!</mat-error>
+                    <mat-error *ngIf="senhaFormControl.errors?.['passwordNotMatch']">As senhas digitadas não são iguais!</mat-error>
+                    <mat-icon matSuffix fontIcon="password"></mat-icon>
+                </mat-form-field>
+
+                <button (click)="criarUsuario(formCadastro)" mat-flat-button color="primary">Finalizar cadastro</button>
+
+                <span [routerLink]="['/']">Voltar para o login</span>
+            </form>
+        </mat-card-content>
+    </mat-card>
+    <footer>    
+    </footer>
+</div>

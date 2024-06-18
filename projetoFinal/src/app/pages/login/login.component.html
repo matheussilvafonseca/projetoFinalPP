@@ -1,0 +1,34 @@
+<div class="entry-container">
+    <div class="title"><h1>Pizzaria Bella Pizza</h1></div>
+    <mat-card appearance="outlined">
+        
+        <mat-card-header>
+            <h1>Login</h1>
+        </mat-card-header>
+        <mat-card-content>
+            <form>
+                <mat-form-field appearance="outline">
+                    <mat-label>E-mail</mat-label>
+                    <input matInput placeholder="E-mail" [formControl]="emailFormControl"/>
+                    <mat-error *ngIf="emailFormControl?.errors?.['required']">O e-mail é obrigatório!</mat-error>
+                    <mat-error *ngIf="emailFormControl?.errors?.['email']">O e-mail não é válido!</mat-error>
+                    <mat-icon matSuffix fontIcon="mail"></mat-icon>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Senha</mat-label>
+                    <input matInput type="password" placeholder="Senha" [formControl]="senhaFormControl" />
+                    <mat-error *ngIf="senhaFormControl?.errors?.['required']">A senha é obrigatória!</mat-error>
+                    <mat-icon matSuffix fontIcon="password"></mat-icon>
+                </mat-form-field>
+
+                <button mat-flat-button color="primary" (click)="login()">Login</button>
+
+                <span [routerLink]="['/cadastro']">Criar conta</span>
+            </form>
+        </mat-card-content>
+    </mat-card>
+    <footer>
+        
+    </footer>
+</div>

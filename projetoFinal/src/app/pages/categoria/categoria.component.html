@@ -1,0 +1,48 @@
+<section>
+    <h1>Categorias</h1>
+    <section class="container">
+        <mat-card appearance="outlined" class="form-categoria">
+            <mat-card-header>
+                <h2>Nova categoria</h2>
+            </mat-card-header>
+            <mat-card-content>
+                <form>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Nome</mat-label>
+                        <input matInput placeholder="Nome" [formControl]="nomeFormControl" />
+                        <mat-error *ngIf="nomeFormControl.errors?.['required']">O nome da categoria é
+                            obrigatório!</mat-error>
+                    </mat-form-field>
+                </form>
+            </mat-card-content>
+            <mat-card-actions [align]="'end'">
+                <button mat-flat-button color="primary" (click)="salvar()">Salvar</button>
+            </mat-card-actions>
+        </mat-card>
+
+
+        <mat-card appearance="outlined">
+            <mat-card-header>
+                <mat-form-field appearance="outline" style="width: 100%;">
+                    <mat-label>Filtrar</mat-label>
+                    <input matInput placeholder="Filtrar" (keyup)="filtrar($event)" />
+                </mat-form-field>
+            </mat-card-header>
+            <mat-card-content>
+                <table mat-table [dataSource]="categorias">
+                    <ng-container matColumnDef="nome">
+                        <th mat-header-cell *matHeaderCellDef> Nome </th>
+                        <td mat-cell *matCellDef="let element"> {{element.nome}} </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="colunas"></tr>
+                    <tr mat-row *matRowDef="let row; columns: colunas;"></tr>
+                </table>
+
+                <mat-paginator [length]="categorias.data.length" [pageSize]="5"
+                    [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+            </mat-card-content>
+        </mat-card>
+
+    </section>
+</section>
