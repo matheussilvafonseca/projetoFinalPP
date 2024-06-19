@@ -1,25 +1,118 @@
 h1 {
     text-align: center;
     color: white;
+    font-size: 2.5rem;
+}
+mat-form-field{
+    background-color: rgb(235, 222, 222);
+    color: black;
 }
 
-.container {
-    margin: 2rem;
+table{
+    background-color: rgb(235, 222, 222);
+    color: black;
+    
 }
-
-.form-produto {
-    margin-bottom: 2rem;
+mat-paginator{
+    background-color: rgb(235, 222, 222);
+    color: black;
 }
 
 form {
     margin-top: 2rem;
 }
-
-mat-form-field {
-    display: block;
-}
-
 mat-card-actions {
     padding-right: 1rem;
     padding-bottom: 1rem;
+}
+.entry-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-image: url("../../../images/pizzaFundo.jpg");
+  background-size: cover;
+  background-position: center;
+}
+
+.title h1 {
+  width: 100%;
+  text-align: center;
+  color: white;
+}
+
+.container {
+  margin: 2rem;
+}
+
+.form-produto, .form-filtrar {
+  margin-bottom: 2rem;
+  background-color: rgb(235, 222, 222);
+    color: black;
+}
+
+mat-form-field {
+  display: block;
+  width: 100%;
+  color: rgb(235, 222, 222);
+}
+
+mat-card {
+  width: 100%;
+  padding-inline: 2.5rem;
+  background-color: rgba(235, 222, 222, 0.9);
+  color: black;
+}
+
+mat-label, mat-error {
+  color: black;
+}
+
+.custom-select .mat-select-content {
+  background-color: rgb(235, 222, 222);
+}
+
+.custom-select .mat-option {
+  background-color: rgb(235, 222, 222);
+  color: #000;
+}
+
+.custom-select .mat-option:hover {
+  background-color: rgb(235, 222, 222);
+}
+
+.custom-select .mat-option.mat-selected {
+  background-color: rgb(235, 222, 222);
+  color: #000;
+}
+
+.custom-select .mat-select-trigger {
+  background-color: rgb(235, 222, 222);
+  color: #000;
+}
+
+.mat-card-actions {
+  padding-right: 1rem;
+  padding-bottom: 1rem;
+}
+
+table.mat-table {
+  width: 100%;
+  margin-top: 2rem;
+}
+
+.button-edit{
+    background-color: green;
+    color: white;
+    border-radius: 10%;
+    font-size: 14px;
+    cursor: pointer;
+}
+.button-delete{
+    background-color: red;
+    color: white;
+    border-radius: 10%;
+    font-size: 14px;
+    cursor: pointer;
 }

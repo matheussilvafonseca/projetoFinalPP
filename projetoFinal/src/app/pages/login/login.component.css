@@ -20,25 +20,16 @@
 mat-card {
     width: max-content;
     padding-inline: 2.5rem;
-    background-color: #d14a38;
-    color: white;
-}
-
-form{
-    color: white;
+    background-color: rgb(235, 222, 222);
+    color: black;
 }
 mat-label {
-    color: white;
+    color: black;
 }
 mat-error{
-    color: white;
+    color: black;
 }
-input{
-    color: white;
-}
-mat-form-field{
-    color: white;
-}
+
 
 h1 {
     width: 100%;

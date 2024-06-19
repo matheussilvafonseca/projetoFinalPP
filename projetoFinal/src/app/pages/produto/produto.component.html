@@ -1,5 +1,5 @@
-<section>
-    <h1>Produtos</h1>
+<section class="entry-container">
+   <div class="title"><h1>Produtos</h1></div> 
     <section class="container">
         <mat-card appearance="outlined" class="form-produto">
             <mat-card-header>
@@ -31,23 +31,22 @@
                         <mat-error *ngIf="produtoForm.get('preco_promocional')?.errors?.['required']">O preço promocional do produto é obrigatório!</mat-error>
                     </mat-form-field>
 
-                    <mat-form-field>
+                    <mat-form-field appearance="outline">
                         <mat-label>Categoria</mat-label>
-                        <select matNativeControl formControlName="id_categoria" name="categoria">
-                          <option *ngFor="let categoria of categorias" [value]="categoria.id">{{categoria.nome}}</option>
-                        </select>
+                        <mat-select formControlName="id_categoria" class="custom-select">
+                          <mat-option *ngFor="let categoria of categorias" [value]="categoria.id">{{categoria.nome}}</mat-option>
+                        </mat-select>
                         <mat-error *ngIf="produtoForm.get('id_categoria')?.errors?.['required']">A categoria do produto é obrigatória!</mat-error>
                     </mat-form-field>
                 </form>
             </mat-card-content>
             <mat-card-actions [align]="'end'">
                 <button mat-flat-button color="primary" (click)="salvar()">Salvar</button>
-                
             </mat-card-actions>
         </mat-card>
 
 
-        <mat-card appearance="outlined">
+        <mat-card appearance="outlined" class="form-filtrar">
             <mat-card-header>
                 <mat-form-field appearance="outline" style="width: 100%;">
                     <mat-label>Filtrar</mat-label>
@@ -83,14 +82,14 @@
 
                     <ng-container matColumnDef="editar">
                         <th mat-header-cell *matHeaderCellDef> </th>
-                        <td mat-cell *matCellDef="let element"><button (click)="editProduct(element)">Editar</button></td>
+                        <td mat-cell *matCellDef="let element"><button class="button-edit" (click)="editProduct(element)">Editar</button></td>
                         
                     </ng-container>
 
                     <ng-container matColumnDef="excluir">
                         <th mat-header-cell *matHeaderCellDef></th>
                         
-                        <td mat-cell *matCellDef="let element"><button (click)="deleteProduct(element.id)">Excluir</button></td>
+                        <td mat-cell *matCellDef="let element"><button class="button-delete" (click)="deleteProduct(element.id)">Excluir</button></td>
                     </ng-container>
 
                     <tr mat-header-row *matHeaderRowDef="colunas"></tr>
