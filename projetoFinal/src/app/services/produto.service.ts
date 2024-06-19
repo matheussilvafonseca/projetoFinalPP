@@ -31,7 +31,17 @@ deletar(produto: Produto){
 }
 
 editar(produto: Produto){
-  return this.http.put(`${environment.target}/product/delete/edit`, produto);
+  return this.http.put(`${environment.target}/product/edit`, null, {
+    params: {
+      id_produto: produto.id!,
+      nome_produto: produto.nome,
+      preco_produto: produto.preco,
+      descricao_produto: produto.descricao,
+      preco_promocional: produto.preco_promocional,
+      id_categoria: produto.id_categoria
+    }
+  });
+
 }
 
 }

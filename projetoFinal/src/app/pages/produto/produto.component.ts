@@ -1,46 +1,40 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackbarComponent } from '../../components/snackbar/snackbar.component';
 import { Produto, ProdutoService } from '../../services/produto.service';
 import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
+import { MatPaginator } from '@angular/material/paginator';
 import { Categoria, CategoriaService } from '../../services/categoria.service';
-
-import {
-  MatDialog,
-  MatDialogRef,
-  MatDialogActions,
-  MatDialogClose,
-  MatDialogTitle,
-  MatDialogContent,
-} from '@angular/material/dialog';
-import {MatButtonModule} from '@angular/material/button';
 
 @Component({
   selector: 'app-produto',
   templateUrl: './produto.component.html',
-  styleUrl: './produto.component.css'
+  styleUrls: ['./produto.component.css']
 })
 export class ProdutoComponent implements OnInit {
-
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-
-  colunas = ['nome','preco','descricao','preco_promocional','categoria', 'editar', 'excluir'];
- 
+  colunas = ['nome', 'preco', 'descricao', 'preco_promocional', 'categoria', 'editar', 'excluir'];
   produtos = new MatTableDataSource<Produto>([]);
-
   categorias: Categoria[] = [];
+  produtoForm: FormGroup;
+  isEditing: boolean = false;
+  editingProductId?: string;
 
-  nomeFormControl: FormControl = new FormControl('', Validators.required);
-  precoFormControl: FormControl = new FormControl('', Validators.required);
-  descricaoFormControl: FormControl = new FormControl('', Validators.required);
-  preco_promocionalFormControl: FormControl = new FormControl('', Validators.required);
-  id_categoriaFormControl: FormControl = new FormControl('', Validators.required);
-
-  constructor(private produtoService: ProdutoService, private categoriaService: CategoriaService,  
-    private snackbarService: MatSnackBar, public dialog: MatDialog) {
+  constructor(
+    private produtoService: ProdutoService,
+    private categoriaService: CategoriaService,
+    private snackbarService: MatSnackBar,
+    private fb: FormBuilder
+  ) {
+    this.produtoForm = this.fb.group({
+      nome: ['', Validators.required],
+      preco: ['', Validators.required],
+      descricao: ['', Validators.required],
+      preco_promocional: ['', Validators.required],
+      id_categoria: ['', Validators.required]
+    });
   }
 
   ngOnInit(): void {
@@ -52,43 +46,31 @@ export class ProdutoComponent implements OnInit {
   }
 
   salvar() {
-    this.nomeFormControl.markAsTouched();
-    this.precoFormControl.markAsTouched();
-    this.descricaoFormControl.markAsTouched();
-    this.preco_promocionalFormControl.markAsTouched();
-    this.id_categoriaFormControl.markAsTouched();
-    
-    if (this.nomeFormControl.valid) {
-      this.produtoService.salvar({ nome: this.nomeFormControl.value,  preco: this.precoFormControl.value, descricao: this.descricaoFormControl.value, 
-        preco_promocional: this.preco_promocionalFormControl.value, id_categoria: this.id_categoriaFormControl.value})
-        .subscribe({
-          next: (resposta) => {
+    this.produtoForm.markAllAsTouched();
+
+    if (this.produtoForm.valid) {
+      const produto = this.produtoForm.value;
+
+      if (this.isEditing) {
+        produto.id = this.editingProductId;
+        this.produtoService.editar(produto).subscribe({
+          next: () => {
+            this.resetForm();
             this.listar();
-            this.nomeFormControl.reset();
-            this.precoFormControl.reset();
-            this.descricaoFormControl.reset();
-            this.preco_promocionalFormControl.reset();
-            this.id_categoriaFormControl.reset();
-            this.snackbarService.openFromComponent(SnackbarComponent, {
-              duration: 5000,
-              horizontalPosition: 'right',
-              verticalPosition: 'bottom',
-              data: {
-                mensagem: 'Produto salvo com sucesso!'
-              }
-            });
+            this.showSnackbar('Produto alterado com sucesso!');
           },
-          error: (err) => {
-            this.snackbarService.openFromComponent(SnackbarComponent, {
-              duration: 5000,
-              horizontalPosition: 'right',
-              verticalPosition: 'bottom',
-              data: {
-                mensagem: err?.error?.error ?? 'Erro ao salvar Produto'
-              }
-            });
-          }
+          error: (err) => this.handleError(err, 'Erro ao alterar Produto')
         });
+      } else {
+        this.produtoService.salvar(produto).subscribe({
+          next: () => {
+            this.resetForm();
+            this.listar();
+            this.showSnackbar('Produto salvo com sucesso!');
+          },
+          error: (err) => this.handleError(err, 'Erro ao salvar Produto')
+        });
+      }
     }
   }
 
@@ -98,27 +80,14 @@ export class ProdutoComponent implements OnInit {
         this.produtos.data = resposta;
         this.produtos.paginator = this.paginator;
       },
-      error: (err) => {
-
-        if (err instanceof HttpErrorResponse) {
-          this.snackbarService.openFromComponent(SnackbarComponent, {
-            duration: 5000,
-            horizontalPosition: 'right',
-            verticalPosition: 'bottom',
-            data: {
-              mensagem: 'Erro ao listar produtos. Tente novamente mais tarde!'
-            }
-          });
-        }
-
-      }
+      error: (err) => this.handleError(err, 'Erro ao listar produtos. Tente novamente mais tarde!')
     });
   }
 
   listarCategoria() {
     this.categoriaService.listar().subscribe({
       next: (categorias) => this.categorias = categorias
-    })
+    });
   }
 
   filtrar(event: any) {
@@ -126,73 +95,50 @@ export class ProdutoComponent implements OnInit {
     this.produtos.filter = pesquisa;
   }
 
-  deleteProduct(idProduto : Produto){
-    console.log(idProduto)
-    if(confirm("Deseja realmente deletar o produto?")){
-      this.produtoService.deletar(idProduto).subscribe(
-        response => {
-          this.snackbarService.openFromComponent(SnackbarComponent, {
-            duration: 5000,
-            horizontalPosition: 'right',
-            verticalPosition: 'bottom',
-            data: {
-              mensagem: 'Produto deletado com sucesso!'
-            }
-          });
-          this.listar();
-        }
-      )
-      
-    } else {
-
+  deleteProduct(idProduto: Produto) {
+    if (confirm("Deseja realmente deletar o produto?")) {
+      this.produtoService.deletar(idProduto).subscribe(() => {
+        this.listar();
+        this.showSnackbar('Produto deletado com sucesso!');
+      });
     }
-
   }
 
-  editProduct(produto : Produto){
+  editProduct(produto: Produto) {
+    this.produtoForm.patchValue({
+    nome: produto.nome,
+    preco: produto.preco,
+    descricao: produto.descricao,
+    preco_promocional: produto.preco_promocional,
+    id_categoria: produto.id_categoria
+  });
+  console.log (produto)
 
-    this.nomeFormControl.value =
-
-    this.nomeFormControl.markAsTouched();
-    this.precoFormControl.markAsTouched();
-    this.descricaoFormControl.markAsTouched();
-    this.preco_promocionalFormControl.markAsTouched();
-    this.id_categoriaFormControl.markAsTouched();
-    
-    if (this.nomeFormControl.valid) {
-      this.produtoService.editar({ nome: this.nomeFormControl.value,  preco: this.precoFormControl.value, descricao: this.descricaoFormControl.value, 
-        preco_promocional: this.preco_promocionalFormControl.value, id_categoria: this.id_categoriaFormControl.value})
-        .subscribe({
-          next: (resposta) => {
-            this.listar();
-            this.nomeFormControl.reset();
-            this.precoFormControl.reset();
-            this.descricaoFormControl.reset();
-            this.preco_promocionalFormControl.reset();
-            this.id_categoriaFormControl.reset();
-            this.snackbarService.openFromComponent(SnackbarComponent, {
-              duration: 5000,
-              horizontalPosition: 'right',
-              verticalPosition: 'bottom',
-              data: {
-                mensagem: 'Produto alterado com sucesso!'
-              }
-            });
-          },
-          error: (err) => {
-            this.snackbarService.openFromComponent(SnackbarComponent, {
-              duration: 5000,
-              horizontalPosition: 'right',
-              verticalPosition: 'bottom',
-              data: {
-                mensagem: err?.error?.error ?? 'Erro ao alterar Produto'
-              }
-            });
-          }
-        });
-    }
-
-
+    this.isEditing = true;
+    this.editingProductId = produto.id;
   }
 
+  resetForm() {
+    this.produtoForm.reset();
+    this.isEditing = false;
+    this.editingProductId = undefined;
+  }
+
+  private showSnackbar(message: string) {
+    this.snackbarService.openFromComponent(SnackbarComponent, {
+      duration: 5000,
+      horizontalPosition: 'right',
+      verticalPosition: 'bottom',
+      data: { mensagem: message }
+    });
+  }
+
+  private handleError(err: any, defaultMessage: string) {
+    this.snackbarService.openFromComponent(SnackbarComponent, {
+      duration: 5000,
+      horizontalPosition: 'right',
+      verticalPosition: 'bottom',
+      data: { mensagem: err?.error?.error ?? defaultMessage }
+    });
+  }
 }
