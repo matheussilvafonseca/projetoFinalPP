@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
+import { Categoria } from './categoria.service';
 
 export type Produto = {
   id?: string,
@@ -8,7 +9,8 @@ export type Produto = {
   preco: string,
   descricao: string,
   preco_promocional: string,
-  id_categoria: string
+  id_categoria: string,
+  categoria?: Categoria
 }
 
 @Injectable({

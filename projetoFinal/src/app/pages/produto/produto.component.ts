@@ -77,7 +77,7 @@ export class ProdutoComponent implements OnInit {
   listar() {
     this.produtoService.listar().subscribe({
       next: (resposta) => {
-        this.produtos.data = resposta;
+        this.produtos.data = resposta
         this.produtos.paginator = this.paginator;
       },
       error: (err) => this.handleError(err, 'Erro ao listar produtos. Tente novamente mais tarde!')
@@ -98,6 +98,7 @@ export class ProdutoComponent implements OnInit {
   deleteProduct(idProduto: Produto) {
     if (confirm("Deseja realmente deletar o produto?")) {
       this.produtoService.deletar(idProduto).subscribe(() => {
+        this.resetForm();
         this.listar();
         this.showSnackbar('Produto deletado com sucesso!');
       });
@@ -110,7 +111,7 @@ export class ProdutoComponent implements OnInit {
     preco: produto.preco,
     descricao: produto.descricao,
     preco_promocional: produto.preco_promocional,
-    id_categoria: produto.id_categoria
+    id_categoria: produto.categoria?.id
   });
   console.log (produto)
 

@@ -1,5 +1,7 @@
 <section class="entry-container">
-   <div class="title"><h1 >Categorias</h1></div> 
+    <div class="title">
+        <h1>Categorias</h1>
+    </div> 
     <section class="container">
         <mat-card appearance="outlined" class="form-categoria">
             <mat-card-header>
@@ -10,8 +12,7 @@
                     <mat-form-field appearance="outline">
                         <mat-label>Nome</mat-label>
                         <input matInput placeholder="Nome" [formControl]="nomeFormControl" />
-                        <mat-error *ngIf="nomeFormControl.errors?.['required']">O nome da categoria é
-                            obrigatório!</mat-error>
+                        <mat-error *ngIf="nomeFormControl.errors?.['required']">O nome da categoria é obrigatório!</mat-error>
                     </mat-form-field>
                 </form>
             </mat-card-content>
@@ -19,7 +20,6 @@
                 <button mat-flat-button color="primary" (click)="salvar()">Salvar</button>
             </mat-card-actions>
         </mat-card>
-
 
         <mat-card appearance="outlined" class="form-filtrar">
             <mat-card-header>
@@ -39,10 +39,8 @@
                     <tr mat-row *matRowDef="let row; columns: colunas;"></tr>
                 </table>
 
-                <mat-paginator [length]="categorias.data.length" [pageSize]="5"
-                    [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+                <mat-paginator [length]="categorias.data.length" [pageSize]="5" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
             </mat-card-content>
         </mat-card>
-
     </section>
 </section>

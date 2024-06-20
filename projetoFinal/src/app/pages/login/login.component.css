@@ -1,16 +1,18 @@
 .entry-container {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background-image: url("../../../images/pizzaFundo.jpg");
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-image: url("../../../images/Bella-Pizza2.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 .title {
     display: flex;
     width: max-content;
     margin-bottom: 4%;
-    color: white;
+    color: #e60c05;
   }
   
   .title h1 {
